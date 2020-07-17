@@ -70,11 +70,17 @@ def tuesday_week(string_date):
     return(str(pd.to_datetime(string_date)-timedelta(date_diff))[:10])
 
 
-my_app_id = '617482599126758'
-my_app_secret = '8603285abccc490ff648f051e724830e'
-my_access_token = 'EAAIxmN751uYBAMZB5DwQlbtAEVAC7zWTty2yBZC1OnBAPm4CEopjqPT2uHUwnVwXEVzKLiSl14hOtJ7fWGMYvx1ZA62E5rfZCFOZCYZBh94niKZCequ2R3SxLvrsOVUTXZBofjjLeSWWFZCU6C5ddCFzbvDlAfnaPdVKN1gpp5bwQOB9hJBsguMiE'
+# Facebook creds
+with open('facebook_creds.json') as json_file:
+    facebook_creds = json.load(json_file)
+    
+# Write all creds
+my_app_id = facebook_creds['my_app_id']
+my_app_secret = facebook_creds['my_app_secret']
+my_access_token = facebook_creds['my_access_token']
 FacebookAdsApi.init(my_app_id, my_app_secret, my_access_token)
-my_account = AdAccount('act_101957673224170')
+my_account = AdAccount(facebook_creds['adaccount'])
+
 
 def update_AWS():
     # Download data currently in Database

@@ -64,9 +64,15 @@ import requests
 
 # Create an instance of the API class
 api_instance = criteo_marketing.AuthenticationApi()
-client_id = 'joe.buckley06@gmail.com' # str | API Client-Id or Username (optional)
-client_secret = 'Cr!tE0rugs' # str | API Client secret or password (optional)
-grant_type = 'client_credentials' # str | Other grant types are not available (optional) (default to 'client_credentials')
+
+# Criteo creds
+with open('criteo_creds.json') as json_file:
+    criteo_creds = json.load(json_file)
+    
+# Write all creds
+client_id = criteo_creds['client_id']
+client_secret = criteo_creds['client_secret']
+grant_type = criteo_creds['grant_type']
 
 try:
     # Authenticates provided credentials and returns an access token
@@ -113,6 +119,12 @@ def update_AWS():
         criteo_df = criteo_df[['Channel','Date', 'Campaign','Spend',
                                'Impressions','Clicks', 'Conversions','Revenue']].copy()
         criteo_df['Category'] = 'Display Retargeting'
+        criteo_df['Revenue'] = criteo_df['Revenue'].astype(float).round(2)
+        criteo_df['Spend'] = criteo_df['Spend'].astype(float).round(2)
+        criteo_df['Impressions'] = criteo_df['Impressions'].astype(int)
+        criteo_df['Clicks'] = criteo_df['Clicks'].astype(int)
+        criteo_df['Conversions'] = criteo_df['Conversions'].astype(int)
+        criteo_df['Tuesday_Week'] = criteo_df['Date'].apply(tuesday_week)
 
         # Append to existing table
         # sqlEngine = create_engine('mysql+pymysql://root:@127.0.0.1/test', pool_recycle=3600)
